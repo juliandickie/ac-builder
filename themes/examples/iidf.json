@@ -1,0 +1,51 @@
+{
+  "name": "iidf",
+  "display_name": "Introduction to Implant Dentistry, The Fundamentals",
+  "colors": {
+    "primary": "#c7a200",
+    "primary_dark": "#a88a00",
+    "secondary": "#1d7d8e",
+    "cta_bg": "#c7a200",
+    "cta_text": "#ffffff",
+    "body_text": "#222222",
+    "body_text_dark": "#eaeaea",
+    "bg": "#f5f5f5",
+    "bg_dark": "#121212",
+    "card_bg": "#ffffff",
+    "card_bg_dark": "#1e1e1e",
+    "muted": "#888888",
+    "accent": "#0a3d62"
+  },
+  "fonts": {
+    "body": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    "headings": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+  },
+  "branding": {
+    "banner_url": "https://content.app-us1.com/LMez9/2026/04/28/8194ab4d-04c0-49a0-8781-533d86068226.jpeg",
+    "banner_urls": [
+      "https://content.app-us1.com/LMez9/2026/04/28/8194ab4d-04c0-49a0-8781-533d86068226.jpeg",
+      "https://content.app-us1.com/LMez9/2026/04/28/91f6cb85-b5d2-424b-9c58-7e5981c6c7fa.jpeg",
+      "https://content.app-us1.com/LMez9/2026/04/28/d990bc54-6658-4dd8-b3f0-88eb1d8c7491.jpeg"
+    ],
+    "banner_alt": "Introduction to Implant Dentistry, The Fundamentals - Auckland",
+    "banner_width_px": 600,
+    "banner_height_px": 180
+  },
+  "urls": {
+    "sales_page": "https://instituteofdigitaldentistry.com/live-courses/introduction-to-implant-dentistry-the-fundamentals/?cid=%CONTACTID%",
+    "not_interested": "https://instituteofdigitaldentistry.com/not-interested/?cid=%CONTACTID%"
+  },
+  "cta_patterns": [
+    "Register now",
+    "Reserve your spot",
+    "Save my seat",
+    "Yes, count me in",
+    "Book the call",
+    "Continue to checkout",
+    "Tell me more"
+  ],
+  "tags": {
+    "interest": "INTEREST: IIDF 2026 - Engaged",
+    "not_interested": "NOT INTERESTED: IIDF 2026"
+  }
+}
