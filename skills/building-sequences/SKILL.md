@@ -1,8 +1,8 @@
 ---
 name: building-sequences
-description: Use when the user wants to build an email sequence in ActiveCampaign from a markdown source file. The Phase 4 MJML pipeline takes a source MD plus list ID and from-address, renders each email through theme-aware MJML, runs pre-send validation, and creates campaigns via the V1 API. Idempotent by name (existing campaigns get V3 PUT updates, new ones get V1 creates). Default is dry-run for safety; pass --apply to commit. Optional click-action wiring via captured automation JSON templates.
+description: Use when the user wants to build an email sequence in ActiveCampaign from a markdown source file. The Phase 4 MJML pipeline takes a source MD plus list ID and from-address, renders each email through theme-aware MJML, runs pre-send validation, and creates campaigns via the V1 API. Idempotent by name (existing campaigns get V3 PUT updates, new ones get V1 creates). Default is dry-run for safety; pass --apply to commit. Click-action automations are captured separately via the capturing-link-actions skill and wired manually in the AC UI for v0.5.
 allowed-tools: Bash, Read
-argument-hint: "<md-file> --list-id <int> --from-name '...' --from-email '...' [--theme auto] [--link-actions map.json] [--emails E1,E2] [--apply]"
+argument-hint: "<md-file> --list-id <int> --from-name '...' --from-email '...' [--theme auto] [--emails E1,E2] [--apply]"
 ---
 
 # Building an email sequence from a markdown source file
