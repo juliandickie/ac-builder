@@ -2,4 +2,4 @@
 from ac_builder.api.v3_client import ACAPIError, ACClient
 
 __all__ = ["ACAPIError", "ACClient"]
-__version__ = "0.4.0"
+__version__ = "0.5.0"
