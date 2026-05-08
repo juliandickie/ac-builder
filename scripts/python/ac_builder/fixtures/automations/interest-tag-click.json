@@ -1,0 +1,91 @@
+{
+  "_comment": "Captured from AC for documentation. POST /automations is not supported on this account so this fixture is reference-only - see _AC_API_LIMITATIONS.md.",
+  "_source_automation_id": 2936,
+  "_captured_at": "2026-04-28",
+  "automation": {
+    "name": "test interested",
+    "status": "2",
+    "entered": "0",
+    "exited": "0",
+    "hidden": "0",
+    "entitlements_violation": "0",
+    "source": "0",
+    "description": null,
+    "exit_on_unsubscribe": "0",
+    "exit_on_conversion": "0",
+    "multientry": "1",
+    "links": {
+      "campaigns": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/campaigns",
+      "contactGoals": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/contactGoals",
+      "contactAutomations": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/contactAutomations",
+      "blocks": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/blocks",
+      "goals": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/goals",
+      "sms": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/sms",
+      "sitemessages": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/sitemessages",
+      "triggers": "https://instituteofdigitaldentistry.api-us1.com/api/3/automations/2936/triggers"
+    }
+  },
+  "triggers": [
+    {
+      "seriesid": "2936",
+      "segmentid": "0",
+      "multientry": "0",
+      "type": "click",
+      "relid": "3354",
+      "params": {
+        "listid": 0,
+        "linkid": 28334
+      },
+      "cdate": "2026-04-28T08:02:23-05:00",
+      "mdate": "2026-04-28T08:02:23-05:00",
+      "links": [],
+      "id": "3657"
+    }
+  ],
+  "blocks": [
+    {
+      "automation": "2936",
+      "parent": "16838",
+      "ordernum": "1",
+      "type": "addtag",
+      "params": {
+        "tagIds": [
+          "9"
+        ]
+      },
+      "deleted": "0",
+      "cdate": "2026-04-28T08:02:52-05:00",
+      "mdate": "2026-04-28T08:02:52-05:00",
+      "links": {
+        "automation": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16839/automation",
+        "parent": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16839/parent",
+        "children": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16839/children",
+        "contactAutomationLogs": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16839/contactAutomationLogs",
+        "goal": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16839/goal"
+      },
+      "id": "16839"
+    },
+    {
+      "automation": "2936",
+      "parent": null,
+      "ordernum": "1",
+      "type": "start",
+      "params": {
+        "starts": [
+          "3657"
+        ]
+      },
+      "deleted": "0",
+      "cdate": "2026-04-28T08:01:34-05:00",
+      "mdate": "2026-04-28T08:02:23-05:00",
+      "links": {
+        "automation": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16838/automation",
+        "parent": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16838/parent",
+        "children": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16838/children",
+        "contactAutomationLogs": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16838/contactAutomationLogs",
+        "goal": "https://instituteofdigitaldentistry.api-us1.com/api/3/automationBlocks/16838/goal"
+      },
+      "id": "16838"
+    }
+  ]
+}

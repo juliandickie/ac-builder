@@ -1,0 +1,46 @@
+[project]
+name = "ac-builder"
+version = "0.5.0"
+description = "ActiveCampaign email automation pipeline - MJML rendering, V1 API, link-action automations"
+authors = [{name = "Julian Dickie", email = "julian@instituteofdigitaldentistry.com"}]
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = [
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+    "markdown-it-py>=3.0.0",
+    "jinja2>=3.1.0",
+    "jsonschema>=4.20.0",
+    "beautifulsoup4>=4.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "ruff>=0.4.0",
+]
+
+[project.scripts]
+ac-builder = "ac_builder.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ac_builder*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
