@@ -13,13 +13,11 @@ exponential backoff on 429/5xx responses.
 from __future__ import annotations
 
 import logging
-import os
 import time
 from typing import Any
 from urllib.parse import urlencode
 
 import requests
-from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
@@ -44,14 +42,22 @@ class ACV1Client:
     """Form-encoded V1 API client."""
 
     def __init__(self, api_url: str | None = None, api_key: str | None = None) -> None:
-        load_dotenv()
-        raw_url = (api_url or os.getenv("AC_API_URL", "")).rstrip("/")
-        self.api_key = api_key or os.getenv("AC_API_KEY", "")
+        from ac_builder.config import load_credentials
+
+        creds = load_credentials()
+        raw_url = (api_url or creds.get("AC_API_URL", "")).rstrip("/")
+        self.api_key = api_key or creds.get("AC_API_KEY", "")
 
         if not raw_url:
-            raise ValueError("AC_API_URL not set")
+            raise ValueError(
+                "AC_API_URL not set. Run /ac-builder:verifying-setup or set in "
+                "~/.config/ac-builder/config.env, ./ac-builder.env, or process env."
+            )
         if not self.api_key:
-            raise ValueError("AC_API_KEY not set")
+            raise ValueError(
+                "AC_API_KEY not set. Run /ac-builder:verifying-setup or set in "
+                "~/.config/ac-builder/config.env, ./ac-builder.env, or process env."
+            )
 
         if raw_url.endswith("/api/3"):
             raw_url = raw_url[:-6]
