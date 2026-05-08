@@ -1,0 +1,14 @@
+{
+  "name": "ac-builder",
+  "version": "0.5.0",
+  "description": "Build ActiveCampaign email sequences from markdown via MJML. Skills wrap the bundled ac-builder Python CLI for rendering, validation, V1 campaign creation, V3 click-action wiring, and theme-driven multi-brand workflows. Use when authoring email sequences, inspecting AC state, or wiring link-action automations.",
+  "author": {
+    "name": "Julian Dickie",
+    "email": "julian@instituteofdigitaldentistry.com",
+    "url": "https://github.com/juliandickie"
+  },
+  "homepage": "https://github.com/juliandickie/ac-builder",
+  "repository": "https://github.com/juliandickie/ac-builder",
+  "license": "MIT",
+  "keywords": ["activecampaign", "email", "automation", "mjml", "marketing"]
+}
