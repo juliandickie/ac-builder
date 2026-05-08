@@ -317,38 +317,53 @@ def _cmd_send_test(args: argparse.Namespace) -> int:
 
 
 def _add_verify_parser(sub: argparse._SubParsersAction) -> None:
-    p = sub.add_parser("verify", help="Verify API access + Node + MJML")
+    p = sub.add_parser("verify", help="Verify ac-builder pipeline (AC API, MJML, themes)")
+    p.add_argument(
+        "--themes-only",
+        action="store_true",
+        help="Skip AC API and MJML checks; only validate theme JSONs against schema.",
+    )
     p.set_defaults(func=_cmd_verify)
 
 
 def _cmd_verify(args: argparse.Namespace) -> int:
     from ac_builder import __version__
-    from ac_builder.api.v3_client import ACClient
-    from ac_builder.render.mjml_runner import mjml_version
-    from ac_builder.render.theme_loader import load_theme
+    from ac_builder.render.theme_loader import discover_theme_names, load_theme
 
     print(f"ac-builder {__version__}")
-    try:
-        print(f"mjml: {mjml_version()}")
-    except Exception as exc:  # noqa: BLE001
-        print(f"mjml: ERROR - {exc}")
-        return 1
 
-    for name in ("lpis", "iidf", "asimr"):
+    if not args.themes_only:
+        from ac_builder.api.v3_client import ACClient
+        from ac_builder.render.mjml_runner import mjml_version
+
         try:
-            load_theme(name)
-            print(f"theme {name}: OK")
+            print(f"mjml: {mjml_version()}")
         except Exception as exc:  # noqa: BLE001
-            print(f"theme {name}: ERROR - {exc}")
+            print(f"mjml: ERROR - {exc}")
             return 1
 
-    try:
-        client = ACClient()
-        client.get("users/me")
-        print(f"AC API: OK ({client.api_url})")
-    except Exception as exc:  # noqa: BLE001
-        print(f"AC API: ERROR - {exc}")
-        return 1
+        try:
+            client = ACClient()
+            client.get("users/me")
+            print(f"AC API: OK ({client.api_url})")
+        except Exception as exc:  # noqa: BLE001
+            print(f"AC API: ERROR - {exc}")
+            return 1
+
+    # Theme validation runs in both modes. Discover themes from the active
+    # themes directory (honours AC_BUILDER_THEMES_DIR). An empty directory
+    # produces 0 themes validated and is not a failure.
+    theme_names = discover_theme_names()
+    if not theme_names:
+        print("themes: 0 found (nothing to validate)")
+    else:
+        for name in theme_names:
+            try:
+                load_theme(name)
+                print(f"theme {name}: OK")
+            except Exception as exc:  # noqa: BLE001
+                print(f"theme {name}: ERROR - {exc}")
+                return 1
     return 0
 
 

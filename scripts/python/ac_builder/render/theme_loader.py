@@ -12,12 +12,26 @@ Public surface:
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import jsonschema
 
-THEMES_DIR = Path(__file__).resolve().parent.parent.parent / "themes"
+_DEFAULT_THEMES_DIR = Path(__file__).resolve().parent.parent.parent / "themes"
+
+
+def _resolve_themes_dir() -> Path:
+    """Resolve themes directory, honouring AC_BUILDER_THEMES_DIR env var."""
+    override = os.getenv("AC_BUILDER_THEMES_DIR")
+    if override:
+        return Path(override)
+    return _DEFAULT_THEMES_DIR
+
+
+# Module-level THEMES_DIR retained for backward compatibility with imports,
+# but lookups should prefer _resolve_themes_dir() for env-var support.
+THEMES_DIR = _DEFAULT_THEMES_DIR
 
 
 class ThemeNotFoundError(FileNotFoundError):
@@ -41,6 +55,20 @@ class ThemeData:
     tags: dict[str, str] = field(default_factory=dict)
 
 
+def discover_theme_names() -> list[str]:
+    """List theme short-names found in the active themes directory.
+
+    Returns an empty list if the directory doesn't exist. Excludes `_schema.json`.
+    Honours AC_BUILDER_THEMES_DIR env var.
+    """
+    themes_dir = _resolve_themes_dir()
+    if not themes_dir.exists():
+        return []
+    return sorted(
+        p.stem for p in themes_dir.glob("*.json") if p.name != "_schema.json"
+    )
+
+
 def load_theme(name: str) -> ThemeData:
     """Load a theme by short name. Validates against the schema.
 
@@ -48,14 +76,15 @@ def load_theme(name: str) -> ThemeData:
         ThemeNotFoundError: if `themes/{name}.json` doesn't exist.
         ThemeValidationError: if the JSON fails schema validation.
     """
-    path = THEMES_DIR / f"{name}.json"
+    themes_dir = _resolve_themes_dir()
+    path = themes_dir / f"{name}.json"
     if not path.exists():
         raise ThemeNotFoundError(f"Theme '{name}' not found at {path}")
 
     with path.open() as f:
         data = json.load(f)
 
-    schema_path = THEMES_DIR / "_schema.json"
+    schema_path = themes_dir / "_schema.json"
     with schema_path.open() as f:
         schema = json.load(f)
 
