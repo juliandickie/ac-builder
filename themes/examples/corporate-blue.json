@@ -1,0 +1,40 @@
+{
+  "name": "corporate-blue",
+  "display_name": "Corporate Blue (example)",
+  "colors": {
+    "primary": "#1e40af",
+    "cta_bg": "#1e40af",
+    "cta_text": "#ffffff",
+    "body_text": "#1f2937",
+    "body_text_dark": "#e5e7eb",
+    "bg": "#ffffff",
+    "bg_dark": "#0f172a",
+    "card_bg": "#f9fafb",
+    "card_bg_dark": "#1e293b"
+  },
+  "fonts": {
+    "body": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    "headings": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+  },
+  "branding": {
+    "banner_url": "https://placehold.co/1200x300/1e40af/ffffff?text=Corporate+Blue",
+    "banner_alt": "Corporate Blue example banner",
+    "banner_width_px": 1200,
+    "banner_height_px": 300
+  },
+  "urls": {
+    "sales_page": "https://example.com/product?cid=%CONTACTID%",
+    "not_interested": "https://example.com/not-interested?cid=%CONTACTID%"
+  },
+  "cta_patterns": [
+    "Get started",
+    "Schedule a demo",
+    "Talk to sales",
+    "Learn more"
+  ],
+  "tags": {
+    "interest": "INTEREST: Corporate Blue Demo",
+    "not_interested": "NOT INTERESTED: Corporate Blue",
+    "purchase": "PURCHASE: Corporate Blue"
+  }
+}

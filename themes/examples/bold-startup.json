@@ -1,0 +1,40 @@
+{
+  "name": "bold-startup",
+  "display_name": "Bold Startup (example)",
+  "colors": {
+    "primary": "#ec4899",
+    "cta_bg": "#000000",
+    "cta_text": "#ffffff",
+    "body_text": "#000000",
+    "body_text_dark": "#ffffff",
+    "bg": "#ffffff",
+    "bg_dark": "#000000",
+    "card_bg": "#fdf2f8",
+    "card_bg_dark": "#18181b"
+  },
+  "fonts": {
+    "body": "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    "headings": "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+  },
+  "branding": {
+    "banner_url": "https://placehold.co/1200x300/ec4899/ffffff?text=Bold+Startup",
+    "banner_alt": "Bold Startup example banner",
+    "banner_width_px": 1200,
+    "banner_height_px": 300
+  },
+  "urls": {
+    "sales_page": "https://example.com/launch?cid=%CONTACTID%",
+    "not_interested": "https://example.com/not-for-me?cid=%CONTACTID%"
+  },
+  "cta_patterns": [
+    "Claim your spot",
+    "Join the waitlist",
+    "Get early access",
+    "I'm in"
+  ],
+  "tags": {
+    "interest": "INTEREST: Bold Startup Launch",
+    "not_interested": "NOT INTERESTED: Bold Startup",
+    "purchase": "PURCHASE: Bold Startup"
+  }
+}

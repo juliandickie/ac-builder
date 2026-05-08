@@ -1,0 +1,40 @@
+{
+  "name": "friendly-startup",
+  "display_name": "Friendly Startup (example)",
+  "colors": {
+    "primary": "#10b981",
+    "cta_bg": "#10b981",
+    "cta_text": "#ffffff",
+    "body_text": "#374151",
+    "body_text_dark": "#f3f4f6",
+    "bg": "#fefce8",
+    "bg_dark": "#1c1917",
+    "card_bg": "#ffffff",
+    "card_bg_dark": "#292524"
+  },
+  "fonts": {
+    "body": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    "headings": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+  },
+  "branding": {
+    "banner_url": "https://placehold.co/1200x300/10b981/ffffff?text=Friendly+Startup",
+    "banner_alt": "Friendly Startup example banner",
+    "banner_width_px": 1200,
+    "banner_height_px": 300
+  },
+  "urls": {
+    "sales_page": "https://example.com/get-started?cid=%CONTACTID%",
+    "not_interested": "https://example.com/maybe-later?cid=%CONTACTID%"
+  },
+  "cta_patterns": [
+    "Try it free",
+    "Start your free trial",
+    "Get my free account",
+    "Show me how it works"
+  ],
+  "tags": {
+    "interest": "INTEREST: Friendly Startup Trial",
+    "not_interested": "NOT INTERESTED: Friendly Startup",
+    "purchase": "PURCHASE: Friendly Startup"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "minimal-mono",
+  "display_name": "Minimal Monochrome (example)",
+  "colors": {
+    "primary": "#000000",
+    "cta_bg": "#000000",
+    "cta_text": "#ffffff",
+    "body_text": "#1a1a1a",
+    "body_text_dark": "#fafafa",
+    "bg": "#ffffff",
+    "bg_dark": "#000000",
+    "card_bg": "#f5f5f5",
+    "card_bg_dark": "#1a1a1a"
+  },
+  "fonts": {
+    "body": "'IBM Plex Sans', -apple-system, sans-serif",
+    "headings": "'IBM Plex Mono', 'Courier New', monospace"
+  },
+  "branding": {
+    "banner_url": "https://placehold.co/1200x300/000000/ffffff?text=Minimal+Mono",
+    "banner_alt": "Minimal Monochrome example banner",
+    "banner_width_px": 1200,
+    "banner_height_px": 300
+  },
+  "urls": {
+    "sales_page": "https://example.com/product?cid=%CONTACTID%",
+    "not_interested": "https://example.com/unsubscribe?cid=%CONTACTID%"
+  },
+  "cta_patterns": [
+    "Read more",
+    "Continue",
+    "Subscribe",
+    "View"
+  ],
+  "tags": {
+    "interest": "INTEREST: Minimal Mono Newsletter",
+    "not_interested": "NOT INTERESTED: Minimal Mono",
+    "purchase": "PURCHASE: Minimal Mono"
+  }
+}
