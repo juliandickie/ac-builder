@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://instituteofdigitaldentistry.com/schemas/ac-builder-theme.json",
+  "title": "ac-builder Theme",
+  "type": "object",
+  "required": ["name", "display_name", "colors", "fonts", "branding", "urls", "cta_patterns", "tags"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]+$",
+      "description": "Lowercase identifier matching filename"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable product name"
+    },
+    "colors": {
+      "type": "object",
+      "required": [
+        "primary", "cta_bg", "cta_text",
+        "body_text", "body_text_dark",
+        "bg", "bg_dark",
+        "card_bg", "card_bg_dark"
+      ],
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^#[0-9a-fA-F]{6}$"
+      }
+    },
+    "fonts": {
+      "type": "object",
+      "required": ["body"],
+      "properties": {
+        "body": {"type": "string", "minLength": 1},
+        "headings": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "branding": {
+      "type": "object",
+      "required": ["banner_url", "banner_alt"],
+      "properties": {
+        "banner_url": {"type": "string", "format": "uri", "description": "Primary banner URL (also banner_urls[0] when banner_urls is set)"},
+        "banner_urls": {
+          "type": "array",
+          "items": {"type": "string", "format": "uri"},
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Optional list of banner URLs to rotate through emails. If absent, banner_url is used for every email."
+        },
+        "banner_alt": {"type": "string", "minLength": 1},
+        "banner_width_px": {"type": "integer", "minimum": 100, "maximum": 1200},
+        "banner_height_px": {"type": "integer", "minimum": 50, "maximum": 600}
+      },
+      "additionalProperties": false
+    },
+    "urls": {
+      "type": "object",
+      "required": ["sales_page", "not_interested"],
+      "additionalProperties": {"type": "string", "format": "uri-reference"}
+    },
+    "cta_patterns": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "object",
+      "properties": {
+        "interest": {"type": "string"},
+        "not_interested": {"type": "string"},
+        "purchase": {"type": "string"}
+      },
+      "additionalProperties": {"type": "string"}
+    }
+  }
+}

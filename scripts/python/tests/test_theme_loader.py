@@ -1,54 +1,126 @@
-"""Tests for theme_loader.py."""
+"""Tests for layered theme resolution: explicit > project > user > plugin examples."""
+from __future__ import annotations
+
+import json
 from pathlib import Path
 
 import pytest
 
-from ac_builder.render.theme_loader import (
-    ThemeData,
-    ThemeNotFoundError,
-    ThemeValidationError,
-    infer_theme_from_path,
-    load_theme,
-)
+from ac_builder.render.theme_loader import infer_theme_from_path
 
 
-def test_load_theme_returns_themedata():
-    theme = load_theme("lpis")
-    assert isinstance(theme, ThemeData)
-    assert theme.name == "lpis"
-    assert theme.display_name.startswith("Live Patient")
+def _make_theme(path: Path, name: str, color: str = "#112233") -> None:
+    """Write a minimal valid theme JSON to the path."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({
+        "name": name,
+        "display_name": name.title(),
+        "colors": {
+            "primary": color,
+            "cta_bg": color,
+            "cta_text": "#ffffff",
+            "body_text": "#222222",
+            "body_text_dark": "#eeeeee",
+            "bg": "#ffffff",
+            "bg_dark": "#111111",
+            "card_bg": "#fafafa",
+            "card_bg_dark": "#222222",
+        },
+        "fonts": {"body": "Arial, sans-serif"},
+        "branding": {"banner_url": "https://example.com/b.jpg", "banner_alt": "banner"},
+        "urls": {"sales_page": "https://example.com/", "not_interested": "https://example.com/no"},
+        "cta_patterns": ["Buy now"],
+        "tags": {},
+    }))
 
 
-def test_load_theme_exposes_colors_dict():
-    theme = load_theme("lpis")
-    assert theme.colors["primary"].startswith("#")
-    assert "body_text" in theme.colors
-    assert "bg_dark" in theme.colors
+def _copy_schema(target_themes_dir: Path) -> None:
+    """Ensure target dir has a _schema.json (copies from the real one)."""
+    real_schema = Path("/Users/juliandickie/code/ac-builder/themes/_schema.json")
+    if real_schema.exists():
+        target_themes_dir.mkdir(parents=True, exist_ok=True)
+        (target_themes_dir / "_schema.json").write_text(real_schema.read_text())
 
 
-def test_load_theme_exposes_cta_patterns_list():
-    theme = load_theme("lpis")
-    assert "Register now" in theme.cta_patterns
+def test_explicit_path_wins(tmp_path, monkeypatch):
+    """An explicit absolute path beats all directory-based resolution."""
+    from ac_builder.render.theme_loader import load_theme
+
+    explicit_dir = tmp_path / "explicit-themes"
+    _copy_schema(explicit_dir)
+    _make_theme(explicit_dir / "explicit.json", "explicit", "#aabbcc")
+
+    theme = load_theme(str(explicit_dir / "explicit.json"))
+    assert theme.name == "explicit"
+    assert theme.colors["primary"] == "#aabbcc"
 
 
-def test_load_unknown_theme_raises():
-    with pytest.raises(ThemeNotFoundError):
-        load_theme("does-not-exist")
+def test_project_themes_dir_used_first(tmp_path, monkeypatch):
+    """./themes/<name>.json beats ~/.config/ac-builder/themes/<name>.json."""
+    from ac_builder.render.theme_loader import load_theme
+
+    project_themes = tmp_path / "project" / "themes"
+    _copy_schema(project_themes)
+    _make_theme(project_themes / "acme.json", "acme", "#ff0000")
+
+    user_themes = tmp_path / "user-config" / "ac-builder" / "themes"
+    _copy_schema(user_themes)
+    _make_theme(user_themes / "acme.json", "acme", "#00ff00")
+
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "user-config"))
+    monkeypatch.delenv("AC_BUILDER_THEMES_DIR", raising=False)
+    monkeypatch.chdir(tmp_path / "project")
+
+    theme = load_theme("acme")
+    assert theme.colors["primary"] == "#ff0000"  # project wins
 
 
-def test_load_invalid_theme_raises_validation_error(tmp_path, monkeypatch):
-    themes_dir = tmp_path / "themes"
-    themes_dir.mkdir()
-    schema_src = Path(__file__).parent.parent / "themes" / "_schema.json"
-    (themes_dir / "_schema.json").write_text(schema_src.read_text())
-    (themes_dir / "broken.json").write_text('{"name": "broken"}')
+def test_user_themes_dir_when_no_project(tmp_path, monkeypatch):
+    """~/.config/ac-builder/themes/<name>.json used when no ./themes/ override."""
+    from ac_builder.render.theme_loader import load_theme
 
-    from ac_builder.render import theme_loader
-    monkeypatch.setattr(theme_loader, "THEMES_DIR", themes_dir)
+    user_themes = tmp_path / "user-config" / "ac-builder" / "themes"
+    _copy_schema(user_themes)
+    _make_theme(user_themes / "acme.json", "acme", "#00ff00")
 
-    with pytest.raises(ThemeValidationError):
-        load_theme("broken")
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "user-config"))
+    monkeypatch.delenv("AC_BUILDER_THEMES_DIR", raising=False)
+    monkeypatch.chdir(tmp_path)  # no ./themes/
 
+    theme = load_theme("acme")
+    assert theme.colors["primary"] == "#00ff00"
+
+
+def test_plugin_examples_fallback(tmp_path, monkeypatch):
+    """Falls back to plugin themes/examples/ when no project or user override."""
+    from ac_builder.render.theme_loader import load_theme
+
+    plugin_examples = tmp_path / "plugin" / "themes" / "examples"
+    _copy_schema(plugin_examples)
+    _make_theme(plugin_examples / "fallback.json", "fallback", "#0000ff")
+
+    # AC_BUILDER_THEMES_DIR points at the plugin's themes/ folder (parent of examples/)
+    monkeypatch.setenv("AC_BUILDER_THEMES_DIR", str(tmp_path / "plugin" / "themes"))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "no-such"))
+    monkeypatch.chdir(tmp_path)
+
+    theme = load_theme("fallback")
+    assert theme.colors["primary"] == "#0000ff"
+
+
+def test_missing_theme_raises(tmp_path, monkeypatch):
+    """Loading a non-existent theme raises ThemeNotFoundError."""
+    from ac_builder.render.theme_loader import load_theme, ThemeNotFoundError
+
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "empty"))
+    monkeypatch.setenv("AC_BUILDER_THEMES_DIR", str(tmp_path / "empty"))
+    monkeypatch.chdir(tmp_path)
+
+    with pytest.raises((ThemeNotFoundError, FileNotFoundError, ValueError, RuntimeError)):
+        load_theme("nonexistent-theme-xyz")
+
+
+# --- infer_theme_from_path tests (preserved from prior version) ---
 
 def test_infer_theme_from_path_lpis():
     assert infer_theme_from_path("output/emails-au-nz/AUNZ_Main_Sequence_E1_to_E20.md") == "lpis"

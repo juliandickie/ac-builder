@@ -5,9 +5,16 @@ patterns, and product tag names. Each theme is a JSON file in `themes/`
 matching `themes/_schema.json`.
 
 Public surface:
-    load_theme(name) -> ThemeData
+    load_theme(name_or_path) -> ThemeData
     infer_theme_from_path(md_path) -> str | None
+    discover_theme_names() -> list[str]
     ThemeData (dataclass), ThemeNotFoundError, ThemeValidationError
+
+Resolution order for `load_theme(name)`:
+    1. Explicit path (if name contains '/' or starts with '.')
+    2. Project ./themes/<name>.json
+    3. User $XDG_CONFIG_HOME/ac-builder/themes/<name>.json (default ~/.config/...)
+    4. Plugin themes/examples/<name>.json (or AC_BUILDER_THEMES_DIR/examples/<name>.json)
 """
 from __future__ import annotations
 
@@ -18,11 +25,21 @@ from pathlib import Path
 
 import jsonschema
 
-_DEFAULT_THEMES_DIR = Path(__file__).resolve().parent.parent.parent / "themes"
+# Plugin-bundled themes/ directory (where _schema.json lives).
+# Path: <repo-root>/themes/. From this file at scripts/python/ac_builder/render/
+# that's parent.parent.parent.parent.parent / "themes".
+_DEFAULT_THEMES_DIR = (
+    Path(__file__).resolve().parent.parent.parent.parent.parent / "themes"
+)
 
 
 def _resolve_themes_dir() -> Path:
-    """Resolve themes directory, honouring AC_BUILDER_THEMES_DIR env var."""
+    """Resolve plugin-bundled themes directory, honouring AC_BUILDER_THEMES_DIR env var.
+
+    This returns the BASE themes directory (where _schema.json lives). The
+    layered theme resolution in load_theme() looks INSIDE this base dir's
+    examples/ subdir for plugin-bundled themes.
+    """
     override = os.getenv("AC_BUILDER_THEMES_DIR")
     if override:
         return Path(override)
@@ -69,22 +86,83 @@ def discover_theme_names() -> list[str]:
     )
 
 
-def load_theme(name: str) -> ThemeData:
-    """Load a theme by short name. Validates against the schema.
+def _candidate_paths(theme_name: str) -> list[Path]:
+    """Return ordered list of paths to try when resolving a theme name.
+
+    Order (first match wins):
+    1. Explicit path (if theme_name contains '/' or starts with '.')
+    2. Project ./themes/<name>.json
+    3. User $XDG_CONFIG_HOME/ac-builder/themes/<name>.json (default ~/.config/...)
+    4. Plugin themes/examples/<name>.json (or AC_BUILDER_THEMES_DIR/examples/<name>.json)
+    """
+    candidates: list[Path] = []
+
+    # 1. Explicit path
+    if "/" in theme_name or theme_name.startswith("."):
+        candidates.append(Path(theme_name).expanduser().resolve())
+        return candidates
+
+    filename = f"{theme_name}.json"
+
+    # 2. Project-level
+    candidates.append(Path.cwd() / "themes" / filename)
+
+    # 3. User-level (XDG)
+    xdg_home = os.environ.get("XDG_CONFIG_HOME")
+    user_base = Path(xdg_home) if xdg_home else Path.home() / ".config"
+    candidates.append(user_base / "ac-builder" / "themes" / filename)
+
+    # 4. Plugin examples
+    plugin_themes_dir_env = os.environ.get("AC_BUILDER_THEMES_DIR")
+    if plugin_themes_dir_env:
+        candidates.append(Path(plugin_themes_dir_env) / "examples" / filename)
+    else:
+        candidates.append(_DEFAULT_THEMES_DIR / "examples" / filename)
+
+    return candidates
+
+
+def load_theme(theme_name_or_path: str) -> ThemeData:
+    """Load a theme by short name or explicit path. Validates against the schema.
+
+    Resolution order: explicit > project ./themes > user ~/.config/ac-builder/themes > plugin themes/examples
 
     Raises:
-        ThemeNotFoundError: if `themes/{name}.json` doesn't exist.
+        ThemeNotFoundError: if no candidate path exists.
         ThemeValidationError: if the JSON fails schema validation.
     """
-    themes_dir = _resolve_themes_dir()
-    path = themes_dir / f"{name}.json"
-    if not path.exists():
-        raise ThemeNotFoundError(f"Theme '{name}' not found at {path}")
+    for candidate in _candidate_paths(theme_name_or_path):
+        if candidate.exists():
+            return _load_and_validate(candidate)
 
+    tried = "\n  ".join(str(p) for p in _candidate_paths(theme_name_or_path))
+    raise ThemeNotFoundError(
+        f"Theme '{theme_name_or_path}' not found. Searched:\n  {tried}"
+    )
+
+
+def _load_and_validate(path: Path) -> ThemeData:
+    """Load and validate a theme JSON at the given path. Internal helper.
+
+    Looks for _schema.json relative to the theme file: same dir, parent dir
+    (for examples/ case), or the plugin-bundled _DEFAULT_THEMES_DIR.
+    """
     with path.open() as f:
         data = json.load(f)
 
-    schema_path = themes_dir / "_schema.json"
+    schema_path = None
+    for candidate in (
+        path.parent / "_schema.json",
+        path.parent.parent / "_schema.json",
+        _DEFAULT_THEMES_DIR / "_schema.json",
+    ):
+        if candidate.exists():
+            schema_path = candidate
+            break
+
+    if schema_path is None:
+        raise ThemeValidationError(f"No _schema.json found near {path}")
+
     with schema_path.open() as f:
         schema = json.load(f)
 
@@ -92,7 +170,8 @@ def load_theme(name: str) -> ThemeData:
         jsonschema.validate(data, schema)
     except jsonschema.ValidationError as exc:
         raise ThemeValidationError(
-            f"Theme '{name}' failed validation: {exc.message} (path: {list(exc.absolute_path)})"
+            f"Theme '{data.get('name', path.name)}' failed validation: "
+            f"{exc.message} (path: {list(exc.absolute_path)})"
         ) from exc
 
     return ThemeData(
