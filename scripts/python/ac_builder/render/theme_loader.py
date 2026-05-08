@@ -73,17 +73,38 @@ class ThemeData:
 
 
 def discover_theme_names() -> list[str]:
-    """List theme short-names found in the active themes directory.
+    """List theme short-names found across the layered theme search paths.
 
-    Returns an empty list if the directory doesn't exist. Excludes `_schema.json`.
-    Honours AC_BUILDER_THEMES_DIR env var.
+    Walks the same directories as load_theme(): project ./themes/, user
+    ~/.config/ac-builder/themes/, and plugin examples/. Returns the union
+    (deduplicated, sorted). Excludes `_schema.json`. Honours
+    AC_BUILDER_THEMES_DIR env var.
     """
-    themes_dir = _resolve_themes_dir()
-    if not themes_dir.exists():
-        return []
-    return sorted(
-        p.stem for p in themes_dir.glob("*.json") if p.name != "_schema.json"
-    )
+    found: set[str] = set()
+
+    # Project ./themes/
+    project_dir = Path.cwd() / "themes"
+    if project_dir.is_dir():
+        found.update(p.stem for p in project_dir.glob("*.json") if p.name != "_schema.json")
+
+    # User ~/.config/ac-builder/themes/
+    xdg_home = os.environ.get("XDG_CONFIG_HOME")
+    user_base = Path(xdg_home) if xdg_home else Path.home() / ".config"
+    user_dir = user_base / "ac-builder" / "themes"
+    if user_dir.is_dir():
+        found.update(p.stem for p in user_dir.glob("*.json") if p.name != "_schema.json")
+
+    # Plugin examples (under base themes dir)
+    base = _resolve_themes_dir()
+    examples_dir = base / "examples"
+    if examples_dir.is_dir():
+        found.update(p.stem for p in examples_dir.glob("*.json") if p.name != "_schema.json")
+    # Also check the base dir itself for backward compat (e.g., if AC_BUILDER_THEMES_DIR
+    # points directly at a flat themes directory without examples/ subdir)
+    if base.is_dir():
+        found.update(p.stem for p in base.glob("*.json") if p.name != "_schema.json")
+
+    return sorted(found)
 
 
 def _candidate_paths(theme_name: str) -> list[Path]:
