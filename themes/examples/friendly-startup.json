@@ -10,7 +10,8 @@
     "bg": "#fefce8",
     "bg_dark": "#1c1917",
     "card_bg": "#ffffff",
-    "card_bg_dark": "#292524"
+    "card_bg_dark": "#292524",
+    "muted": "#888888"
   },
   "fonts": {
     "body": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",

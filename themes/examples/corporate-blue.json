@@ -10,7 +10,8 @@
     "bg": "#ffffff",
     "bg_dark": "#0f172a",
     "card_bg": "#f9fafb",
-    "card_bg_dark": "#1e293b"
+    "card_bg_dark": "#1e293b",
+    "muted": "#888888"
   },
   "fonts": {
     "body": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",

@@ -10,7 +10,8 @@
     "bg": "#ffffff",
     "bg_dark": "#000000",
     "card_bg": "#f5f5f5",
-    "card_bg_dark": "#1a1a1a"
+    "card_bg_dark": "#1a1a1a",
+    "muted": "#888888"
   },
   "fonts": {
     "body": "'IBM Plex Sans', -apple-system, sans-serif",

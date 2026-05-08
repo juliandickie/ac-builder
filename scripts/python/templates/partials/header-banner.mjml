@@ -1,0 +1,12 @@
+<mj-section padding="0" background-color="{{ theme.colors.primary }}">
+  <mj-column>
+    <mj-image
+      src="{{ header_image_url or theme.branding.banner_url }}"
+      alt="{{ header_image_alt or theme.branding.banner_alt }}"
+      href="{{ header_image_link or theme.urls.sales_page }}"
+      width="600px"
+      padding="0"
+      border="0"
+    />
+  </mj-column>
+</mj-section>

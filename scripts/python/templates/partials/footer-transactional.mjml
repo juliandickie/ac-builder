@@ -1,0 +1,12 @@
+<mj-section padding="24px 32px 16px 32px" css-class="card-bg" background-color="{{ theme.colors.card_bg }}">
+  <mj-column>
+    <mj-divider border-color="#eeeeee" border-width="1px" padding="0 0 16px 0" />
+    <mj-text font-size="12px" line-height="1.5" color="{{ theme.colors.muted or '#888888' }}" css-class="text-dark">
+      %SENDER-INFO%
+    </mj-text>
+    <mj-text font-size="12px" line-height="1.5" color="{{ theme.colors.muted or '#888888' }}" css-class="text-dark">
+      You received this because you bought a course from us.
+      <a href="%UNSUBSCRIBELINK%" style="color:{{ theme.colors.muted or '#888888' }};">Unsubscribe</a>
+    </mj-text>
+  </mj-column>
+</mj-section>

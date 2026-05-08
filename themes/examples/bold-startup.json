@@ -10,7 +10,8 @@
     "bg": "#ffffff",
     "bg_dark": "#000000",
     "card_bg": "#fdf2f8",
-    "card_bg_dark": "#18181b"
+    "card_bg_dark": "#18181b",
+    "muted": "#888888"
   },
   "fonts": {
     "body": "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",

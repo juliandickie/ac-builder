@@ -1,0 +1,7 @@
+<mj-section padding="16px 0">
+  <mj-column>
+    <mj-button href="{{ href }}" background-color="{{ theme.colors.cta_bg }}" color="{{ theme.colors.cta_text }}">
+      {{ text }}
+    </mj-button>
+  </mj-column>
+</mj-section>

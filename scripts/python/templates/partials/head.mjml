@@ -1,0 +1,52 @@
+<mj-head>
+  <mj-title>{{ title }}</mj-title>
+  <mj-preview>{{ preheader_text }}</mj-preview>
+  <mj-attributes>
+    <mj-all font-family="{{ theme.fonts.body }}" />
+    <mj-text color="{{ theme.colors.body_text }}" line-height="1.6" font-size="16px" padding="0 0 16px 0" />
+    <mj-button background-color="{{ theme.colors.cta_bg }}" color="{{ theme.colors.cta_text }}" font-size="16px" font-weight="bold" border-radius="6px" padding="16px 32px" inner-padding="16px 32px" />
+    <mj-section background-color="{{ theme.colors.card_bg }}" padding="0" />
+    <mj-divider border-color="#dddddd" border-width="1px" padding="16px 0" />
+  </mj-attributes>
+  <mj-style>
+    a[x-apple-data-detectors] {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+    :root { color-scheme: light dark; supported-color-schemes: light dark; }
+    u + #body a { color: inherit; text-decoration: none; }
+  </mj-style>
+  <mj-style>
+    @media (prefers-color-scheme: dark) {
+      .body-bg { background-color: {{ theme.colors.bg_dark }} !important; }
+      .card-bg { background-color: {{ theme.colors.card_bg_dark }} !important; }
+      .text-dark { color: {{ theme.colors.body_text_dark }} !important; }
+    }
+    [data-ogsc] .text-dark { color: {{ theme.colors.body_text_dark }} !important; }
+    [data-ogsc] .body-bg { background-color: {{ theme.colors.bg_dark }} !important; }
+    [data-ogsc] .card-bg { background-color: {{ theme.colors.card_bg_dark }} !important; }
+  </mj-style>
+  <mj-raw>
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    <!--[if gte mso 9]>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+    <!--[if mso]>
+    <style type="text/css">
+      body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }
+    </style>
+    <![endif]-->
+  </mj-raw>
+</mj-head>

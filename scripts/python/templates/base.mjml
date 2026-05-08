@@ -1,0 +1,26 @@
+<mjml lang="en" dir="ltr">
+{% include "partials/head.mjml" %}
+<mj-body background-color="{{ theme.colors.bg }}" css-class="body-bg" width="600px">
+  {% include "partials/preheader.mjml" %}
+
+  {% block header %}
+  {% include "partials/header-banner.mjml" %}
+  {% endblock %}
+
+  {% block body %}
+  {{ body_mjml }}
+  {% endblock %}
+
+  {% block footer %}
+  {% if footer_mode == "launch" %}
+    {% include "partials/footer-launch.mjml" %}
+  {% elif footer_mode == "onboarding" %}
+    {% include "partials/footer-onboarding.mjml" %}
+  {% elif footer_mode == "transactional" %}
+    {% include "partials/footer-transactional.mjml" %}
+  {% else %}
+    {% include "partials/footer-launch.mjml" %}
+  {% endif %}
+  {% endblock %}
+</mj-body>
+</mjml>
