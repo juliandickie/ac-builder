@@ -1,11 +1,6 @@
 """Tests for ac_builder.config layered credential resolution."""
 from __future__ import annotations
 
-import os
-from pathlib import Path
-
-import pytest
-
 
 def test_process_env_takes_precedence(monkeypatch, tmp_path):
     """Process env vars beat both project and user config files."""
