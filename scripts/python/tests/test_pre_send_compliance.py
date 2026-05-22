@@ -68,3 +68,31 @@ def test_onboarding_with_not_interested_url_is_error():
     report = run_checks(_inputs(html, footer_mode="onboarding"))
     codes = {f.code for f in report.errors}
     assert "onboarding-has-not-interested" in codes
+
+
+def test_launch_missing_not_interested_is_error():
+    # A launch body that was truncated before its closing opt-out link: compliance
+    # tokens survive (template footer) but the body's /not-interested/ link is gone.
+    html = "<html><body><p>Body got cut short here.</p>%UNSUBSCRIBELINK% %SENDER-INFO%</body></html>"
+    report = run_checks(_inputs(html))
+    codes = {f.code for f in report.errors}
+    assert "launch-missing-not-interested" in codes
+
+
+def test_launch_with_not_interested_no_finding():
+    html = (
+        '<html><body><p>Full body.</p>'
+        '<a href="https://instituteofdigitaldentistry.com/not-interested/?cid=%CONTACTID%">Opt out</a>'
+        '%UNSUBSCRIBELINK% %SENDER-INFO%</body></html>'
+    )
+    report = run_checks(_inputs(html))
+    codes = {f.code for f in report.errors}
+    assert "launch-missing-not-interested" not in codes
+
+
+def test_onboarding_missing_not_interested_does_not_trigger_launch_error():
+    # Onboarding emails legitimately omit the link; the launch check must not fire.
+    html = "<html><body><p>Welcome aboard.</p></body></html>"
+    report = run_checks(_inputs(html, footer_mode="onboarding"))
+    codes = {f.code for f in report.errors}
+    assert "launch-missing-not-interested" not in codes

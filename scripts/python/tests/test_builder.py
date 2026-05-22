@@ -33,6 +33,8 @@ Hi %FIRSTNAME|TITLECASE%,
 
 Welcome to LPIS.
 
+Not the right fit? [Click here](https://instituteofdigitaldentistry.com/not-interested/?cid=%CONTACTID%) to opt out.
+
 %UNSUBSCRIBELINK% %SENDER-INFO%
 """
     p = tmp_path / "sample.md"

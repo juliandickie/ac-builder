@@ -31,9 +31,12 @@ be anything matching `[\\w-]+` (e.g., E1, WL-1, C1, G1, LPIS-OB-1).
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -242,6 +245,15 @@ def _parse_section(section: str, code: str, title: str) -> list[EmailDef]:
     metadata = _extract_metadata(section)
     subject_lines = _extract_subject_lines(section)
     preview_text = _extract_preview_text(section)
+
+    for heading in find_in_body_section_headings(section):
+        logger.warning(
+            "Email %s: in-body '### %s' heading after '### Email Body' will silently "
+            "truncate the rendered body there. Convert it to bold (**...**) or another "
+            "non-H3 style. (Regression guard for the E6/E7 truncation.)",
+            code, heading,
+        )
+
     body_blocks = _extract_all_body_blocks(section)
 
     if not body_blocks:
@@ -391,6 +403,48 @@ def _is_inside_fence(text: str, position: int) -> bool:
     # get pure closes.
     pure_closes = close_count - open_count
     return open_count > pure_closes
+
+
+_ANY_H3_RE = re.compile(r"^###\s+(?P<heading>.+?)\s*$", re.MULTILINE)
+_RECOGNIZED_SECTION_PREFIXES = ("Subject Line Options", "Preview Text", "Email Body")
+_NOT_INTERESTED_MARKER = "/not-interested/"
+
+
+def find_in_body_section_headings(section: str) -> list[str]:
+    """Return dangerous in-body '### ' headings that truncate real body content.
+
+    An in-body '### ' heading silently terminates body extraction (see
+    _find_next_real_h3), dropping everything from it to the next section out of
+    the rendered email - the E6/E7 truncation, where an in-body '### The
+    investment' ended the body and dropped the closing opt-out link.
+
+    The opt-out link (/not-interested/) is the true end of a launch body, so only
+    headings appearing BEFORE that link drop real content; headings AFTER it strip
+    post-body authoring notes (### CTA, ### Technique Notes) that are excluded by
+    design. We therefore flag a heading only when it falls between '### Email Body'
+    and the opt-out link (or, if no link is present in the section, anywhere after
+    '### Email Body' - a missing link is itself a truncation signal). Recognized
+    section headings (Subject Line Options, Preview Text, Email Body, including
+    split-send 'Email Body (Morning Send)' variants) and headings inside ::: fenced
+    blocks are never flagged. Returns each offender's heading text (without the
+    leading '### '), in document order. Returns [] when there is no '### Email Body'.
+    """
+    body_match = re.search(r"^###\s+Email Body\b", section, re.MULTILINE)
+    if body_match is None:
+        return []
+    link_pos = section.find(_NOT_INTERESTED_MARKER, body_match.start())
+    boundary = link_pos if link_pos != -1 else len(section)
+    offenders: list[str] = []
+    for m in _ANY_H3_RE.finditer(section):
+        if m.start() < body_match.start() or m.start() >= boundary:
+            continue
+        heading = m.group("heading").strip()
+        if heading.startswith(_RECOGNIZED_SECTION_PREFIXES):
+            continue
+        if _is_inside_fence(section, m.start()):
+            continue
+        offenders.append(heading)
+    return offenders
 
 
 def _extract_h3_block(section: str, heading: str) -> str:

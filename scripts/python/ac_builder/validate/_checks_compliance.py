@@ -91,3 +91,26 @@ def check_onboarding_has_not_interested(inp: PreSendInputs) -> list[CheckFinding
             message="Onboarding email contains a /not-interested/ URL. Per project rule, paying customers do not receive Not Interested CTAs.",
         )]
     return []
+
+
+@register_check
+def check_launch_has_not_interested(inp: PreSendInputs) -> list[CheckFinding]:
+    """Launch emails MUST contain the /not-interested/ opt-out link.
+
+    That link is authored as the final element of every launch email body and is
+    never injected by the template, so its absence from the rendered HTML means
+    the body was cut short before render. This is the exact failure mode behind
+    the E6/E7 truncation (an in-body '### ' heading silently ended body
+    extraction). Erroring here aborts the build instead of pushing a half-email.
+    """
+    if inp.footer_mode == "launch" and _NOT_INTERESTED_URL_PATTERN not in inp.html:
+        return [CheckFinding(
+            code="launch-missing-not-interested",
+            severity="ERROR",
+            message=(
+                "Launch email is missing the /not-interested/ opt-out link, which is "
+                "always the final element of a launch body. Strong signal the body was "
+                "truncated (e.g. an in-body '### ' heading ended the body during parsing)."
+            ),
+        )]
+    return []

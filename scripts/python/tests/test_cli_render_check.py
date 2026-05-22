@@ -64,7 +64,9 @@ def test_render_emits_html_to_file(sample_md, tmp_path):
 
 def test_check_passes_for_valid_html(tmp_path):
     valid_html = """<!DOCTYPE html><html lang="en"><head><title>x</title></head>
-    <body><p>Hi %FIRSTNAME|TITLECASE%, %UNSUBSCRIBELINK% %SENDER-INFO%</p></body></html>"""
+    <body><p>Hi %FIRSTNAME|TITLECASE%,</p>
+    <p>Not the right fit? <a href="https://instituteofdigitaldentistry.com/not-interested/?cid=%CONTACTID%">Click here</a> to opt out.</p>
+    <p>%UNSUBSCRIBELINK% %SENDER-INFO%</p></body></html>"""
     p = tmp_path / "x.html"
     p.write_text(valid_html)
     proc = _run(["check", str(p)])
