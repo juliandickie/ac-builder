@@ -1,11 +1,11 @@
 """Verify the theme JSON schema itself is a valid JSON Schema document."""
 import json
-from pathlib import Path
 
 import jsonschema
 
-REPO_ROOT = Path(__file__).parent.parent
-SCHEMA_PATH = REPO_ROOT / "themes" / "_schema.json"
+from ac_builder.render.theme_loader import THEMES_DIR
+
+SCHEMA_PATH = THEMES_DIR / "_schema.json"
 
 
 def test_schema_file_exists():

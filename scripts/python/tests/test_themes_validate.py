@@ -1,13 +1,13 @@
-"""All theme JSON files in themes/ must validate against _schema.json."""
+"""All bundled example themes must validate against _schema.json."""
 import json
-from pathlib import Path
 
 import jsonschema
 import pytest
 
-REPO_ROOT = Path(__file__).parent.parent
-THEMES_DIR = REPO_ROOT / "themes"
+from ac_builder.render.theme_loader import THEMES_DIR
+
 SCHEMA_PATH = THEMES_DIR / "_schema.json"
+EXAMPLES_DIR = THEMES_DIR / "examples"
 
 
 def _load_schema():
@@ -16,7 +16,7 @@ def _load_schema():
 
 
 def _theme_files():
-    return sorted(p for p in THEMES_DIR.glob("*.json") if p.name != "_schema.json")
+    return sorted(EXAMPLES_DIR.glob("*.json"))
 
 
 @pytest.mark.parametrize("theme_path", _theme_files(), ids=lambda p: p.stem)
