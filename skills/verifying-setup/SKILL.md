@@ -26,7 +26,7 @@ uv run --directory ${CLAUDE_PLUGIN_ROOT}/scripts/python ac-builder verify
 Output looks like:
 
 ```
-ac-builder 0.5.0
+ac-builder 0.5.1
 mjml: 4.15.3
 theme corporate-blue: OK
 theme friendly-startup: OK

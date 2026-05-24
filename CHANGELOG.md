@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-05-24
+
+### Fixed
+
+- Guard against silent truncation of launch email bodies. An in-body `### ` heading terminated markdown body extraction, dropping content (and the closing `/not-interested/` opt-out link) from the rendered email with no error. Pre-send validation now raises an ERROR when a launch-mode email's rendered body is missing its `/not-interested/` opt-out link (always the final element of a launch body, so its absence is a strong truncation signal), and the parser emits a WARNING when a non-section `### ` heading appears before that link (where it would drop real content). Post-link authoring notes such as `### CTA` and `### Technique Notes` are unaffected.
+
 ## [0.5.0] - 2026-05-08
 
 ### Added

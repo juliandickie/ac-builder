@@ -5,7 +5,7 @@ The verify command produces three sections in order: tool version, MJML version,
 ## ac-builder version line
 
 ```
-ac-builder 0.5.0
+ac-builder 0.5.1
 ```
 
 The first line is just the installed version. If this is missing entirely, `uv run` failed; the Python tool isn't installed correctly. Re-run `uv sync --directory ${CLAUDE_PLUGIN_ROOT}/scripts/python --extra dev`.

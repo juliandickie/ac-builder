@@ -1,6 +1,6 @@
 [project]
 name = "ac-builder"
-version = "0.5.0"
+version = "0.5.1"
 description = "ActiveCampaign email automation pipeline - MJML rendering, V1 API, link-action automations"
 authors = [{name = "Julian Dickie", email = "julian@instituteofdigitaldentistry.com"}]
 requires-python = ">=3.11"
