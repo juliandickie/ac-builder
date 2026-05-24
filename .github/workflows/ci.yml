@@ -48,7 +48,7 @@ jobs:
 
       - name: Lint skills
         run: |
-          uv run --directory scripts/python python tools/lint-skills.py .
+          uv run --project scripts/python python tools/lint-skills.py .
 
       - name: Verify themes (--themes-only)
         run: |
