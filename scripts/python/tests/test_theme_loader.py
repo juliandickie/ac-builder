@@ -110,7 +110,7 @@ def test_plugin_examples_fallback(tmp_path, monkeypatch):
 
 def test_missing_theme_raises(tmp_path, monkeypatch):
     """Loading a non-existent theme raises ThemeNotFoundError."""
-    from ac_builder.render.theme_loader import load_theme, ThemeNotFoundError
+    from ac_builder.render.theme_loader import ThemeNotFoundError, load_theme
 
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "empty"))
     monkeypatch.setenv("AC_BUILDER_THEMES_DIR", str(tmp_path / "empty"))

@@ -1,10 +1,10 @@
 """Tests for banner rotation across emails in a sequence."""
+from ac_builder.parser import EmailDef
 from ac_builder.render.compose import (
     ComposeRequest,
     compose_email,
     pick_banner_for_email,
 )
-from ac_builder.parser import EmailDef
 from ac_builder.render.theme_loader import load_theme
 
 

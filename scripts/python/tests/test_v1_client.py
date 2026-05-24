@@ -1,6 +1,7 @@
 """Tests for the V1 API client (no live AC calls - all mocked)."""
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 from ac_builder.api.v1_client import ACV1Client, ACV1Error
 

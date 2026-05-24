@@ -156,8 +156,7 @@ class ACClient:
             if not items:
                 break
 
-            for item in items:
-                yield item
+            yield from items
 
             # If we got fewer than the page size, that's the last page
             if len(items) < limit:

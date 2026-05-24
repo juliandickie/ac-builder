@@ -1,10 +1,9 @@
 """Integration test for builder.py with mocked AC clients."""
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ac_builder.builder import BuildOptions, BuildResult, build_sequence
+from ac_builder.builder import BuildOptions, build_sequence
 
 
 @pytest.fixture

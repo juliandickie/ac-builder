@@ -158,6 +158,7 @@ def _add_build_parser(sub: argparse._SubParsersAction) -> None:
 
 def _cmd_build_sequence(args: argparse.Namespace) -> int:
     import os
+
     from dotenv import load_dotenv
 
     from ac_builder.builder import BuildOptions, build_sequence
@@ -230,9 +231,9 @@ def _cmd_build_sequence(args: argparse.Namespace) -> int:
         ga_name = _resolve_utm_campaign(args.md, args.utm_campaign)
         if ga_name:
             print()
-            print(f"NOTE: when adding these campaigns to automation Send Email steps, AC")
-            print(f"creates a COPY that keeps subject/preheader/body but DROPS the Google")
-            print(f"Analytics Campaign Name. Set it manually on each copy:")
+            print("NOTE: when adding these campaigns to automation Send Email steps, AC")
+            print("creates a COPY that keeps subject/preheader/body but DROPS the Google")
+            print("Analytics Campaign Name. Set it manually on each copy:")
             print(f"  Google Analytics Campaign Name: {ga_name}")
 
     return 1 if has_errors else 0

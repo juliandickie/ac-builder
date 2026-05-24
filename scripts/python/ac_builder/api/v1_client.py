@@ -124,11 +124,11 @@ class ACV1Client:
 
             try:
                 data = response.json()
-            except ValueError:
+            except ValueError as exc:
                 raise ACV1Error(
                     f"V1 {action}: response not JSON",
                     body=response.text,
-                )
+                ) from exc
 
             if isinstance(data, dict) and data.get("result_code") == 0:
                 raise ACV1Error(

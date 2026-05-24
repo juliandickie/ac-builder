@@ -357,7 +357,7 @@ def _extract_all_body_blocks(section: str) -> list[dict[str, str]]:
         return []
 
     results: list[dict[str, str]] = []
-    for i, m in enumerate(matches):
+    for m in matches:
         body_start = m.end()
         # Body extends until the next H3 (any kind), the next H2, or end of section.
         # H3s inside ::: fenced blocks (e.g. :::pillars ... :::) are part of

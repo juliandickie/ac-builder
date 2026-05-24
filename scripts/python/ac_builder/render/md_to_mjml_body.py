@@ -566,7 +566,7 @@ def _emit_pillar_row(inner_md: str, theme: ThemeData) -> str:
     # ~48px above headings - excessive. Tight 8px L/R gives columns more
     # width inside the 600px frame.
     return (
-        f'<mj-section padding="0 8px">\n'
+        '<mj-section padding="0 8px">\n'
         + "\n".join(column_htmls)
         + '\n</mj-section>'
     )

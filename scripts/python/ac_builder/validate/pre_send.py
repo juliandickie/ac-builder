@@ -12,8 +12,8 @@ Usage:
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 
 @dataclass(frozen=True)
@@ -80,7 +80,10 @@ def run_checks(inputs: PreSendInputs) -> CheckReport:
     return CheckReport(findings=findings)
 
 
-# Trigger check module imports so registrations happen.
-from ac_builder.validate import _checks_compliance  # noqa: E402,F401
-from ac_builder.validate import _checks_accessibility  # noqa: E402,F401
-from ac_builder.validate import _checks_stylistic  # noqa: E402,F401
+# Trigger check module imports so registrations happen. These must stay below the
+# definitions above (register_check etc.) to avoid a circular import, hence E402.
+from ac_builder.validate import (  # noqa: E402
+    _checks_accessibility,  # noqa: F401
+    _checks_compliance,  # noqa: F401
+    _checks_stylistic,  # noqa: F401
+)

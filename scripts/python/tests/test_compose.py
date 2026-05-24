@@ -1,5 +1,4 @@
 """Tests for the end-to-end composition pipeline."""
-import pytest
 
 from ac_builder.parser import EmailDef
 from ac_builder.render.compose import ComposeRequest, ComposeResult, compose_email

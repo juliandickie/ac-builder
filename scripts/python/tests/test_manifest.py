@@ -1,6 +1,5 @@
 """Tests for build manifest write/read."""
 import json
-from pathlib import Path
 
 import pytest
 

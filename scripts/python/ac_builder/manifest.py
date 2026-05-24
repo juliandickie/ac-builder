@@ -13,7 +13,7 @@ import dataclasses
 import hashlib
 import json
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -47,7 +47,7 @@ class BuildManifest:
     ac_builder_version: str
     footer_mode: str
     command_line: str
-    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    started_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     completed_at: datetime | None = None
     source_md_sha256: str = ""
     results: list[EmailBuildRecord] = field(default_factory=list)
@@ -76,7 +76,7 @@ class ManifestStore:
 
     def write(self, manifest: BuildManifest) -> Path:
         if manifest.completed_at is None:
-            manifest.completed_at = datetime.now(timezone.utc)
+            manifest.completed_at = datetime.now(UTC)
 
         date_dir = self.root / manifest.started_at.strftime("%Y-%m-%d")
         date_dir.mkdir(parents=True, exist_ok=True)

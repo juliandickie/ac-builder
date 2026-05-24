@@ -10,7 +10,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-
 _PLACEHOLDER_MAP = {
     ("click", "campaignid"): "__CAMPAIGN_ID__",
     ("click", "linkid"): "__LINK_ID__",
