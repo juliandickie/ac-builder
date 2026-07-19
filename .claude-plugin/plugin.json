@@ -1,7 +1,7 @@
 {
   "name": "ac-builder",
-  "version": "0.5.1",
-  "description": "Build ActiveCampaign email sequences from markdown via MJML. Skills wrap the bundled ac-builder Python CLI for rendering, validation, V1 campaign creation, V3 click-action wiring, and theme-driven multi-brand workflows. Use when authoring email sequences, inspecting AC state, or wiring link-action automations.",
+  "version": "0.6.0",
+  "description": "Build ActiveCampaign email sequences from markdown via MJML. Skills wrap the bundled ac-builder Python CLI for rendering, validation, V1 campaign creation, V3 click-action wiring, and theme-driven multi-brand workflows. Use when authoring email sequences, inspecting AC state, wiring link-action automations, or wiring automation canvases in the browser.",
   "author": {
     "name": "Julian Dickie",
     "email": "julian@instituteofdigitaldentistry.com",

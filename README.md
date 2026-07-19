@@ -116,6 +116,7 @@ Then trigger the full build via the skill:
 | `/ac-builder:cleanup-and-testing` | Send tests; delete probe campaigns |
 | `/ac-builder:capturing-link-actions` | Capture an AC automation as a click-action template |
 | `/ac-builder:creating-themes` | Author a new brand theme JSON |
+| `/ac-builder:wiring-automations` | Wire an automation canvas in the browser, then fix and verify the per-copy settings via the API |
 
 ## Themes
 

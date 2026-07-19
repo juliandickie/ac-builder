@@ -169,3 +169,11 @@ Before each `--apply`, every email passes through the validator:
 - Bypass entirely with `--no-check`
 
 To run the validator on a standalone HTML file (useful when you've manually edited an export), use `ac-builder check`. See `references/render-and-check.md`.
+
+## Footer modes by sequence type
+
+`--footer-mode launch` (the default for promo sequences) enforces the literal `/not-interested/` opt-out link as each body's final element. Post-purchase and onboarding sequences use `--footer-mode onboarding` - buyer emails carry the generic unsubscribe footer and the validator does not demand the opt-out line (proven on the ASDE OB01-06 build, July 2026).
+
+## After the drafts - wiring into an automation
+
+Adding a draft to an automation's Send Email step creates a COPY that resets the sender and drops the GA campaign name (the apply output warns about this). The full canvas workflow - placement dedup ("Start from an existing email" once, "Select an email in this automation" thereafter), goal islands, the per-copy settings pass, and the proven API fixes (`PUT /api/3/messages/{id}` for sender, `PUT /api/3/campaigns/{id}` for `analytics_campaign_name`, `PUT /api/3/automations/{id}` for the name) - lives in the `wiring-automations` skill. Send-mode convention: the sequence's first email sends Immediately, the rest Predictive Send, with final-day urgency emails back on Immediately.
