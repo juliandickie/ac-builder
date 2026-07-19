@@ -73,6 +73,8 @@ Trace each persona to verify: a drip finisher hits the first goal unmatched and 
 
 ## What the API can and cannot do here
 
-Can (see copy-settings-api.md): read the copies in a flow, fix sender and reply-to, fix the GA campaign name, rename the automation, read automation status.
+Can (see copy-settings-api.md and `docs/api-capability-map.md`): read the copies in a flow, fix sender and reply-to, fix the GA campaign name, rename the automation, read automation status, and READ the entire canvas - `GET /api/3/automations/{id}/blocks` returns every block with its params under the `automationBlocks` key (send blocks expose `sendtype` imm/opt, so Predictive state is API-verifiable; goal blocks expose position and unmet behaviour).
 
-Cannot: create or edit the flow structure (blocks endpoint returns empty for new-builder canvases), toggle Predictive Send, set the trigger. Those are screen work, verified on screen.
+Cannot (as of the July 2026 audit): create automations (POST 405), toggle Predictive Send or edit flow structure via a proven write path (automationBlocks PUT/POST routes exist but return 422 "Invalid block" on probes - a valid-payload write is unproven and must only ever be attempted on a scratch automation), set the trigger. Those stay screen work.
+
+One warning from the audit - each goal's condition is stored as a HIDDEN UNNAMED SEGMENT (the goal block's `segmentid`). Unnamed segments are load-bearing; never bulk-delete them.

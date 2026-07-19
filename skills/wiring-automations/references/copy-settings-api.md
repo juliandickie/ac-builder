@@ -57,6 +57,9 @@ for code, cid in COPIES.items():
 
 ## Still UI-only after this pass
 
-- **Predictive Send vs Immediately** - the Send toggle in each copy's settings panel. Convention: first email Immediately, the rest Predictive, final-day urgency emails Immediately.
+- **Setting Predictive Send vs Immediately** - the Send toggle in each copy's settings panel. Convention: first email Immediately, the rest Predictive, final-day urgency emails Immediately.
 - Flow structure, triggers, goals - see canvas-recipe.md.
-- Confirm Predictive state from the canvas cards ("This email will send using Predictive Send" line present or absent) rather than reopening every panel.
+
+## Verifying the whole thing in one API read
+
+`GET /api/3/automations/{automation_id}/blocks` (response key `automationBlocks`) exposes every block's params - `send` blocks carry `sendtype` (`"imm"` / `"opt"` = Predictive) and `campaignid`, `wait` blocks the duration, `goal` blocks name/position/unmet, tag blocks their tagIds. One read verifies send modes, wiring order, and goal settings without reopening a single panel. Full schema in `docs/api-capability-map.md`.

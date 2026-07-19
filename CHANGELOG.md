@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-07-19
+
+### Added
+
+- `docs/api-capability-map.md` - empirical audit of the AC V3 API surface (19 July 2026): full canvas readable via `GET /automations/{id}/blocks` under the `automationBlocks` key (send blocks expose `sendtype` imm/opt, goal blocks expose position/unmet, goal conditions live in hidden unnamed segments - never bulk-delete unnamed segments); campaign drafts accept PUT on `name`, `sdate`, `tracklinks`, `embed_images`, `analytics_campaign_name`; segments and webhooks are POST-creatable (segments with NO validation - an empty body creates a blank segment, so never method-probe that endpoint with empty POSTs); automations/campaigns/goals remain POST 405; automationBlocks PUT/POST routes exist but valid-payload writes are unproven.
+
+### Changed
+
+- `wiring-automations` - corrected the 0.6.0 claim that canvas blocks are not API-readable; verification guidance now uses the one-read `automationBlocks` check for send modes, waits, and goal settings instead of reopening panels.
+
 ## [0.6.0] - 2026-07-19
 
 ### Added
