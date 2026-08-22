@@ -1,6 +1,6 @@
 {
   "name": "ac-builder-mjml",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "MJML toolchain dependency for ac-builder",
   "private": true,
   "dependencies": {

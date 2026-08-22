@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-08-22
+
+### Fixed
+
+- Dark mode now actually works. The dark-mode CSS was declared (color-scheme metas, prefers-color-scheme media query, data-ogsc hooks) but non-functional - the rules targeted `.body-bg`/`.card-bg`/`.text-dark` classes that almost nothing carried, and the `.text-dark` colour rule on a td could never override the inline colour MJML places on the child div. Dark-mode clients showed a dark rim around an unchanged white card; partially-inverting clients (Gmail iOS, Outlook mobile) produced black-on-black bodies, reported by customers on the August 2026 iDD celebration broadcasts. `head.mjml` dark rules now target descendants (`.text-dark div/p/span/li/ul/ol`), backgrounds cover the section and its inner table, a `body` rule covers the canvas below the card, and Outlook gets `[data-ogsb]` background rules alongside `[data-ogsc]` text rules. `mj-attributes` defaults attach `card-bg` to every section and `text-dark` to every text block, so coverage is automatic. Templates version 1.0.0 to 1.1.0.
+- Button labels with apostrophes no longer ship a literal `&#x27;`. The `[[button:]]` sentinel path delivers pre-escaped text to `_emit_button`, which escaped it again; the V1 create path masked the double-escape by decoding one entity level on store, but the V3 update path does not. `_emit_button` now unescapes before escaping both label and href, making escaping idempotent.
+
+### Changed
+
+- Deliberate dark-mode exemptions in the generator: brand strip sections and their white text (`strip-keep`/`text-keep`), coloured h2/h3/h4 headings (`text-keep`), footer muted text (`text-keep`, muted grey reads on both schemes), and callout boxes get their own `callout-bg` dark treatment.
+
 ## [0.6.1] - 2026-07-19
 
 ### Added
