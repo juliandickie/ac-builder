@@ -3,9 +3,9 @@
   <mj-preview>{{ preheader_text }}</mj-preview>
   <mj-attributes>
     <mj-all font-family="{{ theme.fonts.body }}" />
-    <mj-text color="{{ theme.colors.body_text }}" line-height="1.6" font-size="16px" padding="0 0 16px 0" />
+    <mj-text color="{{ theme.colors.body_text }}" css-class="text-dark" line-height="1.6" font-size="16px" padding="0 0 16px 0" />
     <mj-button background-color="{{ theme.colors.cta_bg }}" color="{{ theme.colors.cta_text }}" font-size="16px" font-weight="bold" border-radius="6px" padding="16px 32px" inner-padding="16px 32px" />
-    <mj-section background-color="{{ theme.colors.card_bg }}" padding="0" />
+    <mj-section background-color="{{ theme.colors.card_bg }}" css-class="card-bg" padding="0" />
     <mj-divider border-color="#dddddd" border-width="1px" padding="16px 0" />
   </mj-attributes>
   <mj-style>
@@ -22,13 +22,17 @@
   </mj-style>
   <mj-style>
     @media (prefers-color-scheme: dark) {
-      .body-bg { background-color: {{ theme.colors.bg_dark }} !important; }
-      .card-bg { background-color: {{ theme.colors.card_bg_dark }} !important; }
-      .text-dark { color: {{ theme.colors.body_text_dark }} !important; }
+      body { background-color: {{ theme.colors.bg_dark }} !important; }
+      .body-bg, .body-bg > table { background-color: {{ theme.colors.bg_dark }} !important; }
+      .card-bg, .card-bg > table { background-color: {{ theme.colors.card_bg_dark }} !important; }
+      .callout-bg, .callout-bg > table { background-color: {{ theme.colors.bg_dark }} !important; }
+      .text-dark, .text-dark div, .text-dark p, .text-dark span, .text-dark li, .text-dark ul, .text-dark ol { color: {{ theme.colors.body_text_dark }} !important; }
     }
-    [data-ogsc] .text-dark { color: {{ theme.colors.body_text_dark }} !important; }
-    [data-ogsc] .body-bg { background-color: {{ theme.colors.bg_dark }} !important; }
-    [data-ogsc] .card-bg { background-color: {{ theme.colors.card_bg_dark }} !important; }
+    [data-ogsc] .text-dark, [data-ogsc] .text-dark div, [data-ogsc] .text-dark p, [data-ogsc] .text-dark span, [data-ogsc] .text-dark li, [data-ogsc] .text-dark ul, [data-ogsc] .text-dark ol { color: {{ theme.colors.body_text_dark }} !important; }
+    [data-ogsb] body { background-color: {{ theme.colors.bg_dark }} !important; }
+    [data-ogsb] .body-bg, [data-ogsb] .body-bg > table { background-color: {{ theme.colors.bg_dark }} !important; }
+    [data-ogsb] .card-bg, [data-ogsb] .card-bg > table { background-color: {{ theme.colors.card_bg_dark }} !important; }
+    [data-ogsb] .callout-bg, [data-ogsb] .callout-bg > table { background-color: {{ theme.colors.bg_dark }} !important; }
   </mj-style>
   <mj-raw>
     <meta name="x-apple-disable-message-reformatting" />

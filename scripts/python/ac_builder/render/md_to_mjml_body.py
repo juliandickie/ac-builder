@@ -419,8 +419,12 @@ def _emit_button(
     forcing the text to wrap to 3 lines. The overrides also reduce the
     line-height ("line-height" attribute) so wrapped text stays compact.
     """
-    safe_text = html_module.escape(text)
-    safe_href = _escape_href(href)
+    # Callers pass label/href in two states: the [[button:...]] sentinel path
+    # arrives already HTML-escaped by the inline renderer, the CTA-extraction
+    # path arrives raw. Unescape first so escaping is idempotent - otherwise
+    # an apostrophe in a sentinel label ships as a literal "&#x27;".
+    safe_text = html_module.escape(html_module.unescape(text))
+    safe_href = _escape_href(html_module.unescape(href))
 
     if inside_pillar:
         # No outer padding - the column's own padding-bottom (16px) provides
@@ -464,9 +468,9 @@ def _emit_section_strip(text_html: str, theme: ThemeData) -> str:
     """
     bg = theme.colors.get("secondary") or theme.colors.get("primary", "#0a3d62")
     return (
-        f'<mj-section background-color="{bg}" padding="14px 24px">'
+        f'<mj-section background-color="{bg}" css-class="strip-keep" padding="14px 24px">'
         f'<mj-column>'
-        f'<mj-text color="#ffffff" font-size="13px" font-weight="bold" '
+        f'<mj-text color="#ffffff" css-class="text-keep" font-size="13px" font-weight="bold" '
         f'letter-spacing="1.5px" align="center" padding="0">'
         f'<span style="text-transform:uppercase;">{text_html}</span>'
         f'</mj-text>'
@@ -505,7 +509,7 @@ def _emit_callout(inner_tokens: list[Token], theme: ThemeData) -> str:
 
     body = "<br/><br/>".join(paragraph_htmls)
     return (
-        f'<mj-section background-color="#fdf8ec" padding="20px 24px">'
+        f'<mj-section background-color="#fdf8ec" css-class="callout-bg" padding="20px 24px">'
         f'<mj-column>'
         f'<mj-text font-style="italic" line-height="1.6" padding="0">'
         f'<span style="display:inline-block; '
@@ -629,7 +633,7 @@ def _emit_heading(
 
     return (
         f'<mj-text font-size="{size}" font-weight="bold" '
-        f'color="{color}" '
+        f'color="{color}" css-class="text-keep" '
         f'font-family="{html_module.escape(font, quote=True)}" '
         f'padding="0 0 {bottom_pad} 0">{inner}</mj-text>'
     )
